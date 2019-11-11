@@ -27,7 +27,7 @@ perf-measurement-interval-sec=5
 
 [tiled-display]
 enable=1
-rows=1
+rows=2
 columns=2
 width=1280
 height=720
@@ -43,9 +43,9 @@ nvbuf-memory-type=0
 enable=1
 #Type - 1=CameraV4L2 2=URI 3=MultiURI
 type=3
-uri=file://./sample_1080p_h264.mp4
-num-sources=2
-#drop-frame-interval=2
+uri=file://../vids/sample_%d.mp4
+num-sources=4
+drop-frame-interval=1
 gpu-id=0
 # (0): memtype_device   - Memory type Device
 # (1): memtype_pinned   - Memory type Host Pinned
@@ -72,6 +72,17 @@ bitrate=4000000
 # set below properties in case of RTSPStreaming
 rtsp-port=8554
 udp-port=5400
+
+[sink2]
+enable=1
+#Type - 1=FakeSink 2=EglSink 3=File 4=RTSPStreaming
+type=3
+#1=h264 2=h265
+codec=1
+sync=0
+bitrate=4000000
+container=1
+output-file=./output.mp4
 
 [osd]
 enable=1
@@ -113,7 +124,7 @@ nvbuf-memory-type=0
 enable=1
 gpu-id=0
 #model-engine-file=model_b1_fp32.engine
-labelfile-path=labels.txt
+labelfile-path=../labels.txt
 batch-size=1
 #Required by the app for OSD, not a plugin property
 bbox-border-color0=1;0;0;1

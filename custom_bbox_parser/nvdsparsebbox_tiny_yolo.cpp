@@ -286,33 +286,36 @@ decodeYoloV2Tensor(
     const uint numOutputClasses)
 {
     std::vector<NvDsInferParseObjectInfo> bboxInfo;
+    const int b_offset = gridSize * gridSize;
+
     for (uint y = 0; y < gridSize; ++y)
     {
         for (uint x = 0; x < gridSize; ++x)
         {
+	    const int xy_offset = (y * gridSize + x);
+
             for (uint b = 0; b < numBBoxes; ++b)
             {
                 const float pw = anchors[b * 2];
                 const float ph = anchors[b * 2 + 1];
 
-                const int numGridCells = gridSize * gridSize;
-                const int bbindex = y * gridSize + x;
+                const int start_idx = xy_offset + b_offset * b * (5 + numOutputClasses);
         
-                const float tx 
-                    = 1 / (1 + exp (-detections[bbindex + numGridCells * (b * (5 + numOutputClasses) + 0)]));
-                const float ty 
-                    = 1 / (1 + exp (-detections[bbindex + numGridCells * (b * (5 + numOutputClasses) + 1)]));
+                const float sigmoid_tx 
+                    = 1 / (1 + exp (-detections[start_idx + 0 * b_offset]));
+                const float sigmoid_ty 
+                    = 1 / (1 + exp (-detections[start_idx + 1 * b_offset]));
                 const float bx
-                    = x + tx;
+                    = x + sigmoid_tx;
                 const float by 
-                    = y + ty;
+                    = y + sigmoid_ty;
                 const float bw
-                    = pw * exp (detections[bbindex + numGridCells * (b * (5 + numOutputClasses) + 2)]);
+                    = pw * exp (detections[start_idx + 2 * b_offset]);
                 const float bh
-                    = ph * exp (detections[bbindex + numGridCells * (b * (5 + numOutputClasses) + 3)]);
+                    = ph * exp (detections[start_idx + 3 * b_offset]);
 
                 const float objectness
-                    = detections[bbindex + numGridCells * (b * (5 + numOutputClasses) + 4)];
+                    = detections[start_idx + 4 * b_offset];
 
                 float maxProb = 0.0f;
                 int maxIndex = -1;
@@ -320,8 +323,7 @@ decodeYoloV2Tensor(
                 for (uint i = 0; i < numOutputClasses; ++i)
                 {
                     float prob
-                        = (detections[bbindex
-                                      + numGridCells * (b * (5 + numOutputClasses) + (5 + i))]);
+                        = (detections[start_idx + (5 + i) * b_offset]);
 
                     if (prob > maxProb)
                     {
@@ -410,6 +412,8 @@ extern "C" bool NvDsInferParseCustomYoloV2Tiny(
     // Obtaining the output layer.
     const NvDsInferLayerInfo &layer = outputLayersInfo[0];
     assert (layer.dims.numDims == 3);
+	
+    // std :: cout << layer.dims.d[0] << layer.dims.d[1] << layer.dims.d[2] << "\n";
 
     // Decoding the output tensor of TinyYOLOv2 to the NvDsInferParseObjectInfo format.
     std::vector<NvDsInferParseObjectInfo> objects =
