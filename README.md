@@ -44,12 +44,19 @@ DEEPSTREAM_PATH:=/path/to/deepstream_sdk_v4.0_jetson
 
 - Once the variables are set, save the `Makefile`. Compile the custom bounding box parsing function using: `make -C custom_bbox_parser`.
 
-### Step 5: Setting the Configuration files.
+### Step 5: Launching DeepStream.
 
-### Step 6: Launching DeepStream.
+- Download the `sample.tar.gz` from this drive link. Extract the `sample_videos` directory into the `Deep-Stream-ONNX` directory.
+- You can launch DeepStream using the following command:
+
+```bash
+deepstream-app -c ./config/deepstream_app_custom_yolo.txt
+```
+
+- You can edit the config files inside the `config` to alter various settings. You can refer to the [blog](#) for resources on understanding the various properties inside the config files.
 
 ## Notes
 
-- Methods for quickly verifying if an ONNX model will be accepted by DeepStream:
-  - Check if the Opset version used is `<= 9`.
-  - You can use ONNX2TRT to convert a onnx file into 
+- Methods for quickly verifying if an ONNX model will be accepted by DeepStream (v4.0):
+  - Check if the opset version used is `<= 9`.
+  - You can use [onnx2trt](https://github.com/onnx/onnx-tensorrt) to convert an ONNX file into a `.trt` file. I have noticed that if this conversion works, then DeepStream tends to accept the ONNX file. You can refer to the [FAQ](/FAQ.md) section for tips on setting up onnx2trt on the Jetson Nano.
