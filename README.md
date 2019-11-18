@@ -46,7 +46,7 @@ DEEPSTREAM_PATH:=/path/to/deepstream_sdk_v4.0_jetson
 
 ### Step 5: Launching DeepStream.
 
-- Download the `sample.tar.gz` from this drive link. Extract the `sample_videos` directory into the `Deep-Stream-ONNX` directory.
+- Download the `sample.tar.gz` from this [drive link](https://drive.google.com/open?id=1kZERLw2y9ig9nVwvTPrFOrI5VOTri3d7). Extract the `vids` directory into the `Deep-Stream-ONNX` directory.
 - You can launch DeepStream using the following command:
 
 ```bash
