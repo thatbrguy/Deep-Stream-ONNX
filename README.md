@@ -1,6 +1,6 @@
 # Deep-Stream-ONNX
 
-How to deploy ONNX models using DeepStream on Jetson Nano. [[Blog](#)] [[Performance](https://www.youtube.com/watch?v=beX7RqX_FFo)]
+How to deploy ONNX models using DeepStream on Jetson Nano. [[Blog](https://towardsdatascience.com/how-to-deploy-onnx-models-on-nvidia-jetson-nano-using-deepstream-b2872b99a031)] [[Performance](https://www.youtube.com/watch?v=beX7RqX_FFo)]
 
 This repository provides complementary material to this blog post about deploying an ONNX object detection model using the DeepStream SDK on Jetson Nano. Various experiments were designed to test the features and performance of DeepStream. 
 
@@ -8,7 +8,7 @@ This repository provides complementary material to this blog post about deployin
 
 ### Step 1: Setting up Jetson Nano and DeepStream.
 
-- Follow the instructions in the [blog](#) to setup your Jetson Nano and to install the DeepStream SDK.
+- Follow the instructions in the [blog](https://towardsdatascience.com/how-to-deploy-onnx-models-on-nvidia-jetson-nano-using-deepstream-b2872b99a031) to setup your Jetson Nano and to install the DeepStream SDK.
 
 ### Step 2: Clone this repository.
 
@@ -53,7 +53,7 @@ DEEPSTREAM_PATH:=/path/to/deepstream_sdk_v4.0_jetson
 deepstream-app -c ./config/deepstream_app_custom_yolo.txt
 ```
 
-- You can edit the config files inside the `config` to alter various settings. You can refer to the [blog](#) for resources on understanding the various properties inside the config files.
+- You can edit the config files inside the `config` to alter various settings. You can refer to the [blog](https://towardsdatascience.com/how-to-deploy-onnx-models-on-nvidia-jetson-nano-using-deepstream-b2872b99a031) for resources on understanding the various properties inside the config files.
 
 ## Notes
 
