@@ -25,7 +25,8 @@ mkdir build
 cd build
 cmake .. \
 -DCMAKE_CUDA_COMPILER=/usr/local/cuda-10.0/bin/nvcc \
--DTENSORRT_ROOT=/ust/src/tensorrt \
+-DCUDA_INCLUDE_DIRS=/usr/local/cuda-10.0/include \
+-DTENSORRT_ROOT=/usr/src/tensorrt \
 -DGPU_ARCHS="53"
 make -j2
 sudo make install
