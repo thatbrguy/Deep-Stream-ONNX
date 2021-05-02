@@ -4,7 +4,7 @@ How to deploy ONNX models using DeepStream on Jetson Nano. [[Blog](https://towar
 
 This repository provides complementary material to this blog post about deploying an ONNX object detection model using the DeepStream SDK on Jetson Nano. Various experiments were designed to test the features and performance of DeepStream. 
 
-**NOTE (May 2021)**: There might be an issue with respect to the confidence score. Please check issue ([#13](https://github.com/thatbrguy/Deep-Stream-ONNX/issues/13)) for more information. Will post an update here when it is resolved. 
+**NOTE (May 2021)**: ~There might be an issue with respect to the confidence score. Please check issue ([#13](https://github.com/thatbrguy/Deep-Stream-ONNX/issues/13)) for more information. Will post an update here when it is resolved.~ There was an issue with the calculation of the objectess score and class probability (missed applying sigmoid to objectness and softmax to the conditional class confidence). PR #14 fixes this issue and the code should work well. However, I have not tried running the code yet so do let me know if you face any issues. The linked performance video shows performance of the older codebase without this fix. Sorry for the inconvenience. 
 
 ## Setup
 
