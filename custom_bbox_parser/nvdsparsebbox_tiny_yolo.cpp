@@ -313,25 +313,46 @@ decodeYoloV2Tensor(
                     = pw * exp (detections[start_idx + 2 * b_offset]);
                 const float bh
                     = ph * exp (detections[start_idx + 3 * b_offset]);
-
                 const float objectness
-                    = detections[start_idx + 4 * b_offset];
+                    = 1 / (1 + exp(-detections[start_idx + 4 * b_offset]));
 
-                float maxProb = 0.0f;
                 int maxIndex = -1;
+                float maxProb = 0.0f;
+                float max_class_val = 0.0f;
 
+                // Finding the maximum value and well as the index with maximum value 
+                // prior to applying softmax. Since softmax is monotonically increasing,
+                // maxIndex can be calculated here itself.
                 for (uint i = 0; i < numOutputClasses; ++i)
                 {
-                    float prob
-                        = (detections[start_idx + (5 + i) * b_offset]);
+                    float class_val = detections[start_idx + (5 + i) * b_offset];
 
-                    if (prob > maxProb)
+                    if (class_val > max_class_val)
                     {
-                        maxProb = prob;
+                        max_class_val = class_val;
                         maxIndex = i;
                     }
                 }
-                maxProb = objectness * maxProb;
+
+                float sum_exp = 0.0f;
+                // Calculating the denominator of the softmax function. Note that, we are 
+                // performing softmax(x - max(x)) where x is the list of class outputs. 
+                // Note that softmax(x + a) gives the same result as softmax(x) where, a is 
+                // a constant value. By replacing a with -max(x) softmax becomes more 
+                // stable since exp does not have to deal with large numbers.
+                for (uint i = 0; i < numOutputClasses; ++i)
+                {
+                    float class_val = detections[start_idx + (5 + i) * b_offset];
+                    float class_exp = exp(class_val - max_class_val); 
+                    sum_exp = sum_exp + class_exp;
+                }
+
+                // The largest softmax probability among all x values will be softmax(max(x)) 
+                // since softmax is monotonically increasing. Since we are actually calculating 
+                // softmax(x_i - max(x)), when x_i = max(x), we get softmax(max(x) - max(x)), 
+                // which is just 1 / sum_exp.
+                float max_softmax_prob = 1 / sum_exp;
+                maxProb = objectness * max_softmax_prob;
 
                 if (maxProb > probThresh)
                 {
